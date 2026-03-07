@@ -62,20 +62,20 @@ export default function BudgetSliders({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {CHANNEL_IDS.map((id) => {
         const pct = allocations[id];
         const dollars = totalBudget * (pct / 100);
         const color = CHANNEL_COLORS[id];
 
         return (
-          <div key={id} className="flex items-center gap-3">
-            <div className="flex items-center gap-2 w-44 shrink-0">
+          <div key={id} className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-1.5 w-28 sm:w-44 shrink-0">
               <span
-                className="inline-block w-3 h-3 rounded-full shrink-0"
+                className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-sm font-medium text-gray-700 truncate">
+              <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">
                 {channels[id].name}
               </span>
             </div>
@@ -87,14 +87,14 @@ export default function BudgetSliders({
               step={1}
               value={pct}
               onChange={(e) => handleSliderChange(id, Number(e.target.value))}
-              className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+              className="flex-1 h-2 rounded-lg appearance-none cursor-pointer transition-all"
               style={{ accentColor: color }}
             />
 
-            <span className="w-12 text-right text-sm font-semibold text-gray-800">
+            <span className="w-10 sm:w-12 text-right text-xs sm:text-sm font-semibold text-gray-800 transition-colors">
               {pct}%
             </span>
-            <span className="w-20 text-right text-sm text-gray-500">
+            <span className="w-16 sm:w-20 text-right text-xs sm:text-sm text-gray-500 transition-colors">
               {formatDollars(dollars)}
             </span>
           </div>

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   type ChannelId,
+  type IndustryPreset,
   INDUSTRY_PRESETS,
   DEFAULT_PRESET_KEY,
   DEFAULT_BUDGET,
@@ -13,6 +14,7 @@ import BudgetInput from "@/components/BudgetInput";
 import BudgetSliders from "@/components/BudgetSliders";
 import BestBet from "@/components/BestBet";
 import Dashboard from "@/components/Dashboard";
+import AssumptionPanel from "@/components/AssumptionPanel";
 
 export default function Home() {
   const [presetKey, setPresetKey] = useState(DEFAULT_PRESET_KEY);
@@ -20,21 +22,25 @@ export default function Home() {
   const [allocations, setAllocations] = useState<Record<ChannelId, number>>(
     INDUSTRY_PRESETS[DEFAULT_PRESET_KEY].defaultSplit
   );
+  const [customPreset, setCustomPreset] = useState<IndustryPreset>(
+    INDUSTRY_PRESETS[DEFAULT_PRESET_KEY]
+  );
 
-  const preset = INDUSTRY_PRESETS[presetKey];
-  const results = simulateROI(budget, allocations, preset);
+  const results = simulateROI(budget, allocations, customPreset);
   const aggregates = computeAggregates(results);
 
   const handlePresetChange = (key: string) => {
     setPresetKey(key);
-    setAllocations(INDUSTRY_PRESETS[key].defaultSplit);
+    const p = INDUSTRY_PRESETS[key];
+    setCustomPreset(p);
+    setAllocations(p.defaultSplit);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 font-[family-name:var(--font-geist-sans)]">
-      <div className="mx-auto max-w-4xl px-4 py-8">
+      <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
         {/* ---- Header ---- */}
-        <header className="mb-8">
+        <header className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
             Marketing Channel ROI Simulator
           </h1>
@@ -45,30 +51,39 @@ export default function Home() {
         </header>
 
         {/* ---- Controls ---- */}
-        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <PresetSelector value={presetKey} onChange={handlePresetChange} />
           <BudgetInput value={budget} onChange={setBudget} />
         </div>
 
         {/* ---- Sliders ---- */}
-        <div className="mb-8 rounded-xl border border-gray-200 bg-white p-5">
+        <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
           <BudgetSliders
             totalBudget={budget}
             allocations={allocations}
-            channels={preset.channels}
+            channels={customPreset.channels}
             onChange={setAllocations}
           />
         </div>
 
-        {/* ---- Best Bet + Dashboard ---- */}
-        <div className="mb-6">
+        {/* ---- Best Bet ---- */}
+        <div className="mb-5 transition-all duration-300">
           <BestBet results={results} />
         </div>
 
+        {/* ---- Dashboard ---- */}
         <Dashboard results={results} aggregates={aggregates} />
 
+        {/* ---- Assumption Panel ---- */}
+        <div className="mt-5">
+          <AssumptionPanel
+            preset={customPreset}
+            onChange={setCustomPreset}
+          />
+        </div>
+
         {/* ---- Footer ---- */}
-        <footer className="mt-8 text-center text-xs text-gray-400">
+        <footer className="mt-6 pb-4 text-center text-xs text-gray-400">
           This simulator uses simplified industry benchmarks. Results are
           directional estimates, not precise forecasts.
         </footer>

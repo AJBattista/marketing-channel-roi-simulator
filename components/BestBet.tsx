@@ -61,7 +61,7 @@ export default function BestBet({ results }: BestBetProps) {
 
   return (
     <div
-      className="rounded-xl border-2 px-5 py-4"
+      className="rounded-xl border-2 px-5 py-4 transition-all duration-300"
       style={{ borderColor: color, backgroundColor: `${color}08` }}
     >
       <div className="flex items-center gap-2 mb-3">

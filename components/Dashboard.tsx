@@ -63,28 +63,28 @@ export default function Dashboard({ results, aggregates }: DashboardProps) {
   return (
     <div className="space-y-6">
       {/* ---- Revenue Summary ---- */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3 text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3 text-center transition-all duration-300">
           <p className="text-xs font-medium text-blue-600 uppercase tracking-wide">
             Total Revenue
           </p>
-          <p className="mt-1 text-xl font-bold text-blue-900">
+          <p className="mt-1 text-lg sm:text-xl font-bold text-blue-900">
             {fmt(aggregates.totalRevenue)}
           </p>
         </div>
-        <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3 text-center">
+        <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3 text-center transition-all duration-300">
           <p className="text-xs font-medium text-emerald-600 uppercase tracking-wide">
             Customers Acquired
           </p>
-          <p className="mt-1 text-xl font-bold text-emerald-900">
+          <p className="mt-1 text-lg sm:text-xl font-bold text-emerald-900">
             {fmtNum(aggregates.totalCustomers)}
           </p>
         </div>
-        <div className="rounded-xl bg-violet-50 border border-violet-100 px-4 py-3 text-center">
+        <div className="rounded-xl bg-violet-50 border border-violet-100 px-4 py-3 text-center transition-all duration-300">
           <p className="text-xs font-medium text-violet-600 uppercase tracking-wide">
             Total ROI
           </p>
-          <p className="mt-1 text-xl font-bold text-violet-900">
+          <p className="mt-1 text-lg sm:text-xl font-bold text-violet-900">
             {fmtPct(aggregates.totalROI)}
           </p>
         </div>
@@ -133,8 +133,8 @@ export default function Dashboard({ results, aggregates }: DashboardProps) {
       </div>
 
       {/* ---- Channel Summary Table ---- */}
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="rounded-xl border border-gray-200 bg-white overflow-x-auto">
+        <table className="w-full text-sm min-w-[500px]">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
               <th className="px-4 py-3">Channel</th>

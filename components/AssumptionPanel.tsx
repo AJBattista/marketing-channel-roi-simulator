@@ -51,8 +51,8 @@ export default function AssumptionPanel({
 }: AssumptionPanelProps) {
   const [open, setOpen] = useState(false);
 
-  const updateAOV = (aov: number) => {
-    onChange({ ...preset, aov });
+  const updateRpcBase = (base: number) => {
+    onChange({ ...preset, rpc: { ...preset.rpc, base } });
   };
 
   const updateChannel = (
@@ -87,10 +87,10 @@ export default function AssumptionPanel({
       {open && (
         <div className="border-t border-gray-100 px-5 py-4 space-y-4">
           <FieldInput
-            label="Average Order Value"
-            value={preset.aov}
+            label="Revenue Per Conversion"
+            value={preset.rpc.base}
             suffix="$"
-            onChange={updateAOV}
+            onChange={updateRpcBase}
           />
 
           <div className="space-y-3">
@@ -110,42 +110,18 @@ export default function AssumptionPanel({
                     </span>
                   </div>
 
-                  {ch.costModelType === "cpa" && (
-                    <FieldInput
-                      label="CPA"
-                      value={ch.cpa!}
-                      suffix="$"
-                      onChange={(v) => updateChannel(id, "cpa", v)}
-                    />
-                  )}
-                  {ch.costModelType === "monthly_cost" && (
-                    <FieldInput
-                      label="Cost Equiv."
-                      value={Math.round(ch.costEquivalentPercent! * 100)}
-                      suffix="%"
-                      onChange={(v) =>
-                        updateChannel(id, "costEquivalentPercent", v / 100)
-                      }
-                    />
-                  )}
-                  {ch.costModelType === "commission" && (
-                    <FieldInput
-                      label="Commission"
-                      value={Math.round(ch.commissionRate! * 100)}
-                      suffix="%"
-                      onChange={(v) =>
-                        updateChannel(id, "commissionRate", v / 100)
-                      }
-                    />
-                  )}
+                  <FieldInput
+                    label="CAC Base"
+                    value={ch.cacBase}
+                    suffix="$"
+                    onChange={(v) => updateChannel(id, "cacBase", v)}
+                  />
 
                   <FieldInput
-                    label="Conv. Rate"
-                    value={parseFloat((ch.conversionRate * 100).toFixed(2))}
-                    suffix="%"
-                    onChange={(v) =>
-                      updateChannel(id, "conversionRate", v / 100)
-                    }
+                    label="Spend Cap"
+                    value={ch.spendCap}
+                    suffix="$"
+                    onChange={(v) => updateChannel(id, "spendCap", v)}
                   />
                 </div>
               );

@@ -35,34 +35,9 @@ export function simulateROI(
       };
     }
 
-    let customers: number;
-    let cost: number;
-
-    switch (channel.costModelType) {
-      case "cpa": {
-        const cpa = channel.cpa!;
-        customers = channelBudget / cpa;
-        cost = channelBudget;
-        break;
-      }
-      case "monthly_cost": {
-        const overheadPercent = channel.costEquivalentPercent!;
-        const effectiveBudget = channelBudget * (1 - overheadPercent);
-        const estimatedCPA = 1 / channel.conversionRate;
-        customers = effectiveBudget / estimatedCPA;
-        cost = channelBudget;
-        break;
-      }
-      case "commission": {
-        const commission = channel.commissionRate!;
-        const estimatedCPA = preset.aov * commission;
-        customers = channelBudget / estimatedCPA;
-        cost = customers * preset.aov * commission;
-        break;
-      }
-    }
-
-    const revenue = customers * preset.aov;
+    const cost = channelBudget;
+    const customers = cost / channel.cacBase;
+    const revenue = customers * preset.rpc.base;
     const roi = ((revenue - cost) / cost) * 100;
     const cac = customers > 0 ? cost / customers : 0;
 

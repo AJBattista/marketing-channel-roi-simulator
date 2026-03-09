@@ -8,24 +8,27 @@ export const CHANNEL_IDS = [
 
 export type ChannelId = (typeof CHANNEL_IDS)[number];
 
-export type CostModelType = "cpa" | "monthly_cost" | "commission";
-
-export interface ChannelConfig {
+export interface ChannelBenchmark {
   id: ChannelId;
   name: string;
   color: string;
-  costModelType: CostModelType;
-  cpa?: number;
-  costEquivalentPercent?: number;
-  commissionRate?: number;
-  conversionRate: number;
+  cacFloor: number;
+  cacBase: number;
+  cacCeiling: number;
+  spendCap: number;
+}
+
+export interface RevenuePerConversion {
+  floor: number;
+  base: number;
+  ceiling: number;
 }
 
 export interface IndustryPreset {
   name: string;
-  aov: number;
+  rpc: RevenuePerConversion;
   defaultSplit: Record<ChannelId, number>;
-  channels: Record<ChannelId, ChannelConfig>;
+  channels: Record<ChannelId, ChannelBenchmark>;
 }
 
 export interface ChannelResult {
@@ -55,85 +58,87 @@ const CHANNEL_NAMES: Record<ChannelId, string> = {
   affiliate: "Affiliate Marketing",
 };
 
-function makeChannel(
+function ch(
   id: ChannelId,
-  costModelType: CostModelType,
-  conversionRate: number,
-  opts: { cpa?: number; costEquivalentPercent?: number; commissionRate?: number }
-): ChannelConfig {
+  cacFloor: number,
+  cacBase: number,
+  cacCeiling: number,
+  spendCap: number
+): ChannelBenchmark {
   return {
     id,
     name: CHANNEL_NAMES[id],
     color: CHANNEL_COLORS[id],
-    costModelType,
-    conversionRate,
-    ...opts,
+    cacFloor,
+    cacBase,
+    cacCeiling,
+    spendCap,
   };
 }
 
 export const INDUSTRY_PRESETS: Record<string, IndustryPreset> = {
   dtcEcommerce: {
     name: "DTC Ecommerce",
-    aov: 55,
-    defaultSplit: { paidAds: 40, seo: 20, influencer: 15, email: 15, affiliate: 10 },
+    rpc: { floor: 40, base: 55, ceiling: 80 },
+    defaultSplit: { paidAds: 35, seo: 20, influencer: 15, email: 20, affiliate: 10 },
     channels: {
-      paidAds: makeChannel("paidAds", "cpa", 0.025, { cpa: 18 }),
-      seo: makeChannel("seo", "monthly_cost", 0.03, { costEquivalentPercent: 0.3 }),
-      influencer: makeChannel("influencer", "cpa", 0.018, { cpa: 12 }),
-      email: makeChannel("email", "cpa", 0.045, { cpa: 1 }),
-      affiliate: makeChannel("affiliate", "commission", 0.032, { commissionRate: 0.15 }),
+      paidAds:   ch("paidAds",   20, 28, 80, 12000),
+      seo:       ch("seo",       16, 22, 70,  8000),
+      influencer:ch("influencer", 18, 24, 75,  7000),
+      email:     ch("email",      6,  9, 25,  3500),
+      affiliate: ch("affiliate", 12, 18, 45,  6000),
     },
   },
 
   b2bSaas: {
     name: "B2B SaaS",
-    aov: 250,
-    defaultSplit: { paidAds: 35, seo: 25, influencer: 10, email: 20, affiliate: 10 },
+    rpc: { floor: 200, base: 300, ceiling: 450 },
+    defaultSplit: { paidAds: 25, seo: 30, influencer: 5, email: 25, affiliate: 15 },
     channels: {
-      paidAds: makeChannel("paidAds", "cpa", 0.018, { cpa: 80 }),
-      seo: makeChannel("seo", "monthly_cost", 0.035, { costEquivalentPercent: 0.25 }),
-      influencer: makeChannel("influencer", "cpa", 0.01, { cpa: 50 }),
-      email: makeChannel("email", "cpa", 0.03, { cpa: 5 }),
-      affiliate: makeChannel("affiliate", "commission", 0.025, { commissionRate: 0.2 }),
+      paidAds:   ch("paidAds",   100, 140, 360, 15000),
+      seo:       ch("seo",        70,  95, 260, 12000),
+      influencer:ch("influencer", 160, 220, 400,  5000),
+      email:     ch("email",      45,  65, 180,  7000),
+      affiliate: ch("affiliate",  85, 120, 280,  8000),
     },
   },
 
   localServices: {
     name: "Local Services",
-    aov: 150,
-    defaultSplit: { paidAds: 30, seo: 30, influencer: 5, email: 25, affiliate: 10 },
+    rpc: { floor: 180, base: 250, ceiling: 400 },
+    defaultSplit: { paidAds: 35, seo: 30, influencer: 5, email: 20, affiliate: 10 },
     channels: {
-      paidAds: makeChannel("paidAds", "cpa", 0.035, { cpa: 30 }),
-      seo: makeChannel("seo", "monthly_cost", 0.04, { costEquivalentPercent: 0.35 }),
-      influencer: makeChannel("influencer", "cpa", 0.015, { cpa: 25 }),
-      email: makeChannel("email", "cpa", 0.03, { cpa: 2 }),
-      affiliate: makeChannel("affiliate", "commission", 0.025, { commissionRate: 0.1 }),
+      paidAds:   ch("paidAds",    45,  65, 160, 10000),
+      seo:       ch("seo",        40,  55, 140,  9000),
+      influencer:ch("influencer",  95, 140, 300,  4000),
+      email:     ch("email",      20,  35, 100,  4000),
+      affiliate: ch("affiliate",  50,  70, 180,  5000),
     },
   },
 
   consumerApp: {
     name: "Consumer App",
-    aov: 15,
-    defaultSplit: { paidAds: 35, seo: 15, influencer: 25, email: 15, affiliate: 10 },
+    rpc: { floor: 12, base: 18, ceiling: 30 },
+    defaultSplit: { paidAds: 40, seo: 10, influencer: 20, email: 15, affiliate: 15 },
     channels: {
-      paidAds: makeChannel("paidAds", "cpa", 0.02, { cpa: 6 }),
-      seo: makeChannel("seo", "monthly_cost", 0.025, { costEquivalentPercent: 0.2 }),
-      influencer: makeChannel("influencer", "cpa", 0.025, { cpa: 4 }),
-      email: makeChannel("email", "cpa", 0.05, { cpa: 0.5 }),
-      affiliate: makeChannel("affiliate", "commission", 0.03, { commissionRate: 0.25 }),
+      paidAds:   ch("paidAds",    6,  9, 30, 20000),
+      seo:       ch("seo",        8, 12, 28,  6000),
+      influencer:ch("influencer",  7, 10, 25, 12000),
+      email:     ch("email",      3,  4, 10,  5000),
+      affiliate: ch("affiliate",  5,  7, 18,  8000),
     },
   },
 
   infoProduct: {
     name: "Info Product / Creator Brand",
-    aov: 97,
+    rpc: { floor: 60, base: 90, ceiling: 150 },
     defaultSplit: { paidAds: 25, seo: 15, influencer: 20, email: 25, affiliate: 15 },
     channels: {
-      paidAds: makeChannel("paidAds", "cpa", 0.022, { cpa: 25 }),
-      seo: makeChannel("seo", "monthly_cost", 0.035, { costEquivalentPercent: 0.25 }),
-      influencer: makeChannel("influencer", "cpa", 0.02, { cpa: 15 }),
-      email: makeChannel("email", "cpa", 0.055, { cpa: 1.5 }),
-      affiliate: makeChannel("affiliate", "commission", 0.04, { commissionRate: 0.3 }),
+      paidAds:   ch("paidAds",   25, 35,  95, 12000),
+      seo:       ch("seo",       20, 28,  80,  9000),
+      influencer:ch("influencer", 16, 22,  70,  8000),
+      email:     ch("email",      8, 12,  35,  5000),
+      affiliate: ch("affiliate", 12, 18,  50,  7000),
     },
   },
 };

@@ -28,19 +28,36 @@ function FieldInput({
   suffix: string;
   onChange: (v: number) => void;
 }) {
+  const [draft, setDraft] = useState<string>(String(value));
+  const [focused, setFocused] = useState(false);
+
+  const displayValue = focused ? draft : String(value);
+
   return (
     <div>
       <label className="block text-xs text-[var(--text-muted)] mb-0.5">{label}</label>
       <div className="flex items-center gap-1">
         <input
-          type="number"
-          step="any"
-          value={value}
-          onChange={(e) => {
-            const v = parseFloat(e.target.value);
-            if (!isNaN(v)) onChange(v);
+          type="text"
+          inputMode="decimal"
+          value={displayValue}
+          onFocus={() => {
+            setFocused(true);
+            setDraft(String(value));
           }}
-          className="w-20 rounded border border-[var(--border-default)] bg-[var(--bg-base)] px-2 py-1 text-xs text-[var(--text-primary)]
+          onChange={(e) => {
+            const raw = e.target.value;
+            setDraft(raw);
+            const v = parseFloat(raw);
+            onChange(isNaN(v) ? 0 : v);
+          }}
+          onBlur={() => {
+            setFocused(false);
+            if (draft === "") {
+              onChange(0);
+            }
+          }}
+          className="w-20 min-h-[44px] rounded border border-[var(--border-default)] bg-[var(--bg-base)] px-2 py-2 text-xs text-[var(--text-primary)]
                      focus:outline-none focus:ring-1 focus:ring-blue-500/50"
         />
         <span className="text-xs text-[var(--text-muted)]">{suffix}</span>

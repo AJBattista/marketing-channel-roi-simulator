@@ -38,8 +38,8 @@ function FieldInput({
       <label className="block text-xs text-[var(--text-muted)] mb-0.5">{label}</label>
       <div className="flex items-center gap-1">
         <input
-          type="number"
-          step="any"
+          type="text"
+          inputMode="decimal"
           value={displayValue}
           onFocus={() => {
             setFocused(true);
@@ -57,7 +57,7 @@ function FieldInput({
               onChange(0);
             }
           }}
-          className="w-20 rounded border border-[var(--border-default)] bg-[var(--bg-base)] px-2 py-1 text-xs text-[var(--text-primary)]
+          className="w-20 min-h-[44px] rounded border border-[var(--border-default)] bg-[var(--bg-base)] px-2 py-2 text-xs text-[var(--text-primary)]
                      focus:outline-none focus:ring-1 focus:ring-blue-500/50"
         />
         <span className="text-xs text-[var(--text-muted)]">{suffix}</span>

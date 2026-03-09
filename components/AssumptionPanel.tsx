@@ -8,9 +8,13 @@ import {
   CHANNEL_COLORS,
 } from "@/lib/data";
 
-interface AssumptionPanelProps {
+interface BenchmarkPanelProps {
   preset: IndustryPreset;
   onChange: (preset: IndustryPreset) => void;
+}
+
+function fmt(n: number): string {
+  return "$" + Math.round(n).toLocaleString("en-US");
 }
 
 function FieldInput({
@@ -26,7 +30,7 @@ function FieldInput({
 }) {
   return (
     <div>
-      <label className="block text-xs text-gray-500 mb-0.5">{label}</label>
+      <label className="block text-xs text-[var(--text-muted)] mb-0.5">{label}</label>
       <div className="flex items-center gap-1">
         <input
           type="number"
@@ -36,45 +40,43 @@ function FieldInput({
             const v = parseFloat(e.target.value);
             if (!isNaN(v)) onChange(v);
           }}
-          className="w-20 rounded border border-gray-200 px-2 py-1 text-xs text-gray-900
-                     focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-20 rounded border border-[var(--border-default)] bg-[var(--bg-base)] px-2 py-1 text-xs text-[var(--text-primary)]
+                     focus:outline-none focus:ring-1 focus:ring-blue-500/50"
         />
-        <span className="text-xs text-gray-400">{suffix}</span>
+        <span className="text-xs text-[var(--text-muted)]">{suffix}</span>
       </div>
     </div>
   );
 }
 
-export default function AssumptionPanel({
+export default function BenchmarkPanel({
   preset,
   onChange,
-}: AssumptionPanelProps) {
+}: BenchmarkPanelProps) {
   const [open, setOpen] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(false);
 
-  const updateAOV = (aov: number) => {
-    onChange({ ...preset, aov });
+  const updateRpcBase = (base: number) => {
+    onChange({ ...preset, rpc: { ...preset.rpc, base } });
   };
 
-  const updateChannel = (
-    id: ChannelId,
-    field: string,
-    value: number
-  ) => {
+  const updateChannel = (id: ChannelId, field: string, value: number) => {
     const channel = { ...preset.channels[id], [field]: value };
     const channels = { ...preset.channels, [id]: channel };
     onChange({ ...preset, channels });
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden transition-all duration-200">
+    <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] overflow-hidden transition-all duration-200">
+      {/* ---- Header (toggle) ---- */}
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-5 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        className="flex w-full items-center justify-between px-5 py-3 text-sm font-medium text-[var(--text-secondary)] hover:bg-white/[0.02] transition-colors"
       >
-        <span>Assumptions</span>
+        <span>Industry Benchmarks</span>
         <svg
-          className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`h-4 w-4 text-[var(--text-muted)] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -85,73 +87,157 @@ export default function AssumptionPanel({
       </button>
 
       {open && (
-        <div className="border-t border-gray-100 px-5 py-4 space-y-4">
-          <FieldInput
-            label="Average Order Value"
-            value={preset.aov}
-            suffix="$"
-            onChange={updateAOV}
-          />
+        <>
+          {/* ---- Summary ---- */}
+          <div className="border-t border-[var(--border-subtle)] px-5 py-4">
+            <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-4">
+              <span>
+                <span className="text-[var(--text-muted)]">RPC </span>
+                <span className="font-semibold text-[var(--text-primary)]">
+                  {fmt(preset.rpc.floor)} – {fmt(preset.rpc.base)} – {fmt(preset.rpc.ceiling)}
+                </span>
+              </span>
+            </div>
 
-          <div className="space-y-3">
-            {CHANNEL_IDS.map((id) => {
-              const ch = preset.channels[id];
-              const color = CHANNEL_COLORS[id];
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs min-w-[480px]">
+                <thead>
+                  <tr className="text-left text-[var(--text-muted)] uppercase tracking-wide">
+                    <th className="pb-2 pr-3 font-medium">Channel</th>
+                    <th className="pb-2 px-3 text-right font-medium">CAC Floor</th>
+                    <th className="pb-2 px-3 text-right font-medium">CAC Base</th>
+                    <th className="pb-2 px-3 text-right font-medium">CAC Ceiling</th>
+                    <th className="pb-2 pl-3 text-right font-medium">Spend Cap</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {CHANNEL_IDS.map((id) => {
+                    const ch = preset.channels[id];
+                    const color = CHANNEL_COLORS[id];
+                    return (
+                      <tr key={id} className="border-t border-[var(--border-subtle)]">
+                        <td className="py-2 pr-3">
+                          <span className="flex items-center gap-1.5">
+                            <span
+                              className="inline-block w-2 h-2 rounded-full shrink-0"
+                              style={{ backgroundColor: color }}
+                            />
+                            <span className="font-medium text-[var(--text-secondary)] truncate">
+                              {ch.name}
+                            </span>
+                          </span>
+                        </td>
+                        <td className="py-2 px-3 text-right text-[var(--text-muted)]">
+                          {fmt(ch.cacFloor)}
+                        </td>
+                        <td className="py-2 px-3 text-right text-[var(--text-secondary)] font-semibold">
+                          {fmt(ch.cacBase)}
+                        </td>
+                        <td className="py-2 px-3 text-right text-[var(--text-muted)]">
+                          {fmt(ch.cacCeiling)}
+                        </td>
+                        <td className="py-2 pl-3 text-right text-[var(--text-muted)]">
+                          {fmt(ch.spendCap)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-              return (
-                <div key={id} className="flex flex-wrap items-end gap-x-4 gap-y-2">
-                  <div className="flex items-center gap-1.5 w-40 shrink-0">
-                    <span
-                      className="inline-block w-2 h-2 rounded-full shrink-0"
-                      style={{ backgroundColor: color }}
-                    />
-                    <span className="text-xs font-medium text-gray-700 truncate">
-                      {ch.name}
-                    </span>
-                  </div>
+          {/* ---- Expand/Collapse for editor ---- */}
+          <div className="border-t border-[var(--border-subtle)]">
+            <button
+              type="button"
+              onClick={() => setEditorOpen(!editorOpen)}
+              className="flex w-full items-center justify-between px-5 py-3 text-xs font-medium text-[var(--text-muted)] hover:bg-white/[0.02] transition-colors"
+            >
+              <span>{editorOpen ? "Hide Advanced Controls" : "Edit Benchmarks"}</span>
+              <svg
+                className={`h-3.5 w-3.5 text-[var(--text-muted)] transition-transform duration-200 ${editorOpen ? "rotate-180" : ""}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
 
-                  {ch.costModelType === "cpa" && (
-                    <FieldInput
-                      label="CPA"
-                      value={ch.cpa!}
-                      suffix="$"
-                      onChange={(v) => updateChannel(id, "cpa", v)}
-                    />
-                  )}
-                  {ch.costModelType === "monthly_cost" && (
-                    <FieldInput
-                      label="Cost Equiv."
-                      value={Math.round(ch.costEquivalentPercent! * 100)}
-                      suffix="%"
-                      onChange={(v) =>
-                        updateChannel(id, "costEquivalentPercent", v / 100)
-                      }
-                    />
-                  )}
-                  {ch.costModelType === "commission" && (
-                    <FieldInput
-                      label="Commission"
-                      value={Math.round(ch.commissionRate! * 100)}
-                      suffix="%"
-                      onChange={(v) =>
-                        updateChannel(id, "commissionRate", v / 100)
-                      }
-                    />
-                  )}
-
+            {editorOpen && (
+              <div className="border-t border-[var(--border-subtle)] px-5 py-4 space-y-4">
+                <div className="flex flex-wrap gap-x-4 gap-y-2">
                   <FieldInput
-                    label="Conv. Rate"
-                    value={parseFloat((ch.conversionRate * 100).toFixed(2))}
-                    suffix="%"
-                    onChange={(v) =>
-                      updateChannel(id, "conversionRate", v / 100)
-                    }
+                    label="RPC Floor"
+                    value={preset.rpc.floor}
+                    suffix="$"
+                    onChange={(v) => onChange({ ...preset, rpc: { ...preset.rpc, floor: v } })}
+                  />
+                  <FieldInput
+                    label="RPC Base"
+                    value={preset.rpc.base}
+                    suffix="$"
+                    onChange={updateRpcBase}
+                  />
+                  <FieldInput
+                    label="RPC Ceiling"
+                    value={preset.rpc.ceiling}
+                    suffix="$"
+                    onChange={(v) => onChange({ ...preset, rpc: { ...preset.rpc, ceiling: v } })}
                   />
                 </div>
-              );
-            })}
+
+                <div className="space-y-3">
+                  {CHANNEL_IDS.map((id) => {
+                    const ch = preset.channels[id];
+                    const color = CHANNEL_COLORS[id];
+
+                    return (
+                      <div key={id} className="flex flex-wrap items-end gap-x-3 gap-y-2">
+                        <div className="flex items-center gap-1.5 w-40 shrink-0">
+                          <span
+                            className="inline-block w-2 h-2 rounded-full shrink-0"
+                            style={{ backgroundColor: color }}
+                          />
+                          <span className="text-xs font-medium text-[var(--text-secondary)] truncate">
+                            {ch.name}
+                          </span>
+                        </div>
+
+                        <FieldInput
+                          label="Floor"
+                          value={ch.cacFloor}
+                          suffix="$"
+                          onChange={(v) => updateChannel(id, "cacFloor", v)}
+                        />
+                        <FieldInput
+                          label="Base"
+                          value={ch.cacBase}
+                          suffix="$"
+                          onChange={(v) => updateChannel(id, "cacBase", v)}
+                        />
+                        <FieldInput
+                          label="Ceiling"
+                          value={ch.cacCeiling}
+                          suffix="$"
+                          onChange={(v) => updateChannel(id, "cacCeiling", v)}
+                        />
+                        <FieldInput
+                          label="Spend Cap"
+                          value={ch.spendCap}
+                          suffix="$"
+                          onChange={(v) => updateChannel(id, "spendCap", v)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
+        </>
       )}
     </div>
   );

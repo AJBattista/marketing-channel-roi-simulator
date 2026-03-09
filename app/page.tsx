@@ -12,7 +12,7 @@ import { simulateROI, computeAggregates } from "@/lib/calculator";
 import PresetSelector from "@/components/PresetSelector";
 import BudgetInput from "@/components/BudgetInput";
 import BudgetSliders from "@/components/BudgetSliders";
-import BestBet from "@/components/BestBet";
+import Insights from "@/components/BestBet";
 import Dashboard from "@/components/Dashboard";
 import AssumptionPanel from "@/components/AssumptionPanel";
 
@@ -37,14 +37,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
       <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
         {/* ---- Header ---- */}
         <header className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
             Marketing Channel ROI Simulator
           </h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
             Estimate which marketing channels will produce the highest ROI for
             your budget.
           </p>
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
 
         {/* ---- Sliders ---- */}
-        <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
+        <div className="mb-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 sm:p-5">
           <BudgetSliders
             totalBudget={budget}
             allocations={allocations}
@@ -66,15 +66,20 @@ export default function Home() {
           />
         </div>
 
-        {/* ---- Best Bet ---- */}
+        {/* ---- Insights ---- */}
         <div className="mb-5 transition-all duration-300">
-          <BestBet results={results} />
+          <Insights
+            results={results}
+            allocations={allocations}
+            totalBudget={budget}
+            preset={customPreset}
+          />
         </div>
 
         {/* ---- Dashboard ---- */}
         <Dashboard results={results} aggregates={aggregates} />
 
-        {/* ---- Assumption Panel ---- */}
+        {/* ---- Industry Benchmarks ---- */}
         <div className="mt-5">
           <AssumptionPanel
             preset={customPreset}
@@ -83,7 +88,7 @@ export default function Home() {
         </div>
 
         {/* ---- Footer ---- */}
-        <footer className="mt-6 pb-4 text-center text-xs text-gray-400">
+        <footer className="mt-6 pb-4 text-center text-xs text-[var(--text-muted)]">
           This simulator uses simplified industry benchmarks. Results are
           directional estimates, not precise forecasts.
         </footer>

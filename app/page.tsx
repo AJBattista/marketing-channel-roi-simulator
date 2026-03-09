@@ -12,7 +12,7 @@ import { simulateROI, computeAggregates } from "@/lib/calculator";
 import PresetSelector from "@/components/PresetSelector";
 import BudgetInput from "@/components/BudgetInput";
 import BudgetSliders from "@/components/BudgetSliders";
-import BestBet from "@/components/BestBet";
+import Insights from "@/components/BestBet";
 import Dashboard from "@/components/Dashboard";
 import AssumptionPanel from "@/components/AssumptionPanel";
 
@@ -66,15 +66,20 @@ export default function Home() {
           />
         </div>
 
-        {/* ---- Best Bet ---- */}
+        {/* ---- Insights ---- */}
         <div className="mb-5 transition-all duration-300">
-          <BestBet results={results} />
+          <Insights
+            results={results}
+            allocations={allocations}
+            totalBudget={budget}
+            preset={customPreset}
+          />
         </div>
 
         {/* ---- Dashboard ---- */}
         <Dashboard results={results} aggregates={aggregates} />
 
-        {/* ---- Assumption Panel ---- */}
+        {/* ---- Industry Benchmarks ---- */}
         <div className="mt-5">
           <AssumptionPanel
             preset={customPreset}

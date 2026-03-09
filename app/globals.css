@@ -2,9 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-base: #0b1120;
+  --bg-surface: #111827;
+  --bg-elevated: #1a2332;
+  --border-subtle: #1e293b;
+  --border-default: #334155;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+}
+
 body {
-  color: #171717;
-  background: #f9fafb;
+  color: var(--text-primary);
+  background: var(--bg-base);
+}
+
+/* Range slider dark styling */
+input[type="range"] {
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-default);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border-default);
+  border: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-top: -5px;
+  cursor: pointer;
+  border: 2px solid var(--bg-base);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--bg-base);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 @layer utilities {

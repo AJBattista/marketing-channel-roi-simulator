@@ -41,11 +41,11 @@ function CustomTooltip({
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-md text-sm">
-      <p className="font-semibold text-gray-800">{d.name}</p>
-      <p className="text-gray-600">ROI: {fmtPct(d.roi)}</p>
-      <p className="text-gray-600">Revenue: {fmt(d.revenue)}</p>
-      <p className="text-gray-600">CAC: {fmt(d.cac)}</p>
+    <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] px-3 py-2 shadow-lg text-sm">
+      <p className="font-semibold text-[var(--text-primary)]">{d.name}</p>
+      <p className="text-[var(--text-secondary)]">ROI: {fmtPct(d.roi)}</p>
+      <p className="text-[var(--text-secondary)]">Revenue: {fmt(d.revenue)}</p>
+      <p className="text-[var(--text-secondary)]">CAC: {fmt(d.cac)}</p>
     </div>
   );
 }
@@ -64,59 +64,59 @@ export default function Dashboard({ results, aggregates }: DashboardProps) {
     <div className="space-y-6">
       {/* ---- Revenue Summary ---- */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-3 text-center transition-all duration-300">
-          <p className="text-xs font-medium text-blue-600 uppercase tracking-wide">
+        <div className="rounded-xl bg-blue-500/10 border border-blue-500/20 px-4 py-3 text-center transition-all duration-300">
+          <p className="text-xs font-medium text-blue-400 uppercase tracking-wide">
             Total Revenue
           </p>
-          <p className="mt-1 text-lg sm:text-xl font-bold text-blue-900">
+          <p className="mt-1 text-lg sm:text-xl font-bold text-blue-300">
             {fmt(aggregates.totalRevenue)}
           </p>
         </div>
-        <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3 text-center transition-all duration-300">
-          <p className="text-xs font-medium text-emerald-600 uppercase tracking-wide">
+        <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 px-4 py-3 text-center transition-all duration-300">
+          <p className="text-xs font-medium text-emerald-400 uppercase tracking-wide">
             Customers Acquired
           </p>
-          <p className="mt-1 text-lg sm:text-xl font-bold text-emerald-900">
+          <p className="mt-1 text-lg sm:text-xl font-bold text-emerald-300">
             {fmtNum(aggregates.totalCustomers)}
           </p>
         </div>
-        <div className="rounded-xl bg-violet-50 border border-violet-100 px-4 py-3 text-center transition-all duration-300">
-          <p className="text-xs font-medium text-violet-600 uppercase tracking-wide">
+        <div className="rounded-xl bg-violet-500/10 border border-violet-500/20 px-4 py-3 text-center transition-all duration-300">
+          <p className="text-xs font-medium text-violet-400 uppercase tracking-wide">
             Total ROI
           </p>
-          <p className="mt-1 text-lg sm:text-xl font-bold text-violet-900">
+          <p className="mt-1 text-lg sm:text-xl font-bold text-violet-300">
             {fmtPct(aggregates.totalROI)}
           </p>
         </div>
       </div>
 
       {/* ---- Bar Chart ---- */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4">
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 10 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
             <XAxis
               dataKey="name"
-              tick={{ fontSize: 12, fill: "#6b7280" }}
+              tick={{ fontSize: 12, fill: "#94a3b8" }}
               tickLine={false}
-              axisLine={{ stroke: "#d1d5db" }}
+              axisLine={{ stroke: "#334155" }}
             />
             <YAxis
               tickFormatter={(v: number) => `${v}%`}
-              tick={{ fontSize: 12, fill: "#6b7280" }}
+              tick={{ fontSize: 12, fill: "#94a3b8" }}
               tickLine={false}
-              axisLine={{ stroke: "#d1d5db" }}
+              axisLine={{ stroke: "#334155" }}
               label={{
                 value: "ROI %",
                 angle: -90,
                 position: "insideLeft",
-                style: { fontSize: 12, fill: "#9ca3af" },
+                style: { fontSize: 12, fill: "#64748b" },
               }}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
             <Legend
               formatter={(value: string) => (
-                <span className="text-sm text-gray-600">{value}</span>
+                <span className="text-sm text-[var(--text-secondary)]">{value}</span>
               )}
             />
             <Bar dataKey="roi" name="Projected ROI" radius={[4, 4, 0, 0]}>
@@ -124,7 +124,7 @@ export default function Dashboard({ results, aggregates }: DashboardProps) {
                 <Cell
                   key={i}
                   fill={entry.color}
-                  fillOpacity={entry.faded ? 0.25 : 1}
+                  fillOpacity={entry.faded ? 0.2 : 0.85}
                 />
               ))}
             </Bar>
@@ -133,10 +133,10 @@ export default function Dashboard({ results, aggregates }: DashboardProps) {
       </div>
 
       {/* ---- Channel Summary Table ---- */}
-      <div className="rounded-xl border border-gray-200 bg-white overflow-x-auto">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] overflow-x-auto">
         <table className="w-full text-sm min-w-[500px]">
           <thead>
-            <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
+            <tr className="border-b border-[var(--border-subtle)] text-left text-xs font-medium uppercase tracking-wide text-[var(--text-muted)]">
               <th className="px-4 py-3">Channel</th>
               <th className="px-4 py-3 text-right">Budget</th>
               <th className="px-4 py-3 text-right">Customers</th>
@@ -149,9 +149,9 @@ export default function Dashboard({ results, aggregates }: DashboardProps) {
             {results.map((r) => (
               <tr
                 key={r.channelId}
-                className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50"
+                className="border-b border-[var(--border-subtle)] last:border-0 hover:bg-white/[0.02]"
               >
-                <td className="px-4 py-3 font-medium text-gray-800">
+                <td className="px-4 py-3 font-medium text-[var(--text-primary)]">
                   <span className="flex items-center gap-2">
                     <span
                       className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
@@ -160,16 +160,16 @@ export default function Dashboard({ results, aggregates }: DashboardProps) {
                     {r.channelName}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-right text-gray-600">
+                <td className="px-4 py-3 text-right text-[var(--text-secondary)]">
                   {fmt(r.budgetAllocated)}
                 </td>
-                <td className="px-4 py-3 text-right text-gray-600">
+                <td className="px-4 py-3 text-right text-[var(--text-secondary)]">
                   {fmtNum(r.customersAcquired)}
                 </td>
-                <td className="px-4 py-3 text-right text-gray-600">
+                <td className="px-4 py-3 text-right text-[var(--text-secondary)]">
                   {fmt(r.revenue)}
                 </td>
-                <td className="px-4 py-3 text-right text-gray-600">
+                <td className="px-4 py-3 text-right text-[var(--text-secondary)]">
                   {fmt(r.cac)}
                 </td>
                 <td className="px-4 py-3 text-right font-semibold" style={{ color: CHANNEL_COLORS[r.channelId] }}>

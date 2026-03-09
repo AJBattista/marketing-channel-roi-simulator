@@ -82,9 +82,9 @@ function generateWarnings(
 }
 
 const SEVERITY_STYLES = {
-  info: "bg-blue-50 border-blue-200 text-blue-800",
-  caution: "bg-amber-50 border-amber-200 text-amber-800",
-  alert: "bg-red-50 border-red-200 text-red-800",
+  info: "bg-blue-500/10 border-blue-500/20 text-blue-300",
+  caution: "bg-amber-500/10 border-amber-500/20 text-amber-300",
+  alert: "bg-red-500/10 border-red-500/20 text-red-300",
 };
 
 const SEVERITY_DOT = {
@@ -115,8 +115,8 @@ export default function Insights({
   return (
     <div className="space-y-4">
       {/* ---- 1. Most Efficient Channel Right Now ---- */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 transition-all duration-300">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 sm:p-5 transition-all duration-300">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)] mb-3">
           Most Efficient Channel Right Now
         </p>
         {bestChannel ? (
@@ -126,13 +126,13 @@ export default function Insights({
                 className="inline-block w-3 h-3 rounded-full shrink-0"
                 style={{ backgroundColor: CHANNEL_COLORS[bestChannel.channelId] }}
               />
-              <span className="text-lg font-bold text-gray-900">
+              <span className="text-lg font-bold text-[var(--text-primary)]">
                 {bestChannel.channelName}
               </span>
             </div>
             <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
               <span>
-                <span className="text-gray-500">ROI </span>
+                <span className="text-[var(--text-muted)]">ROI </span>
                 <span
                   className="font-semibold"
                   style={{ color: CHANNEL_COLORS[bestChannel.channelId] }}
@@ -141,32 +141,32 @@ export default function Insights({
                 </span>
               </span>
               <span>
-                <span className="text-gray-500">Revenue </span>
-                <span className="font-semibold text-gray-800">
+                <span className="text-[var(--text-muted)]">Revenue </span>
+                <span className="font-semibold text-[var(--text-primary)]">
                   {fmt(bestChannel.revenue)}
                 </span>
               </span>
               <span>
-                <span className="text-gray-500">CAC </span>
-                <span className="font-semibold text-gray-800">
+                <span className="text-[var(--text-muted)]">CAC </span>
+                <span className="font-semibold text-[var(--text-primary)]">
                   {fmt(bestChannel.cac)}
                 </span>
               </span>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-[var(--text-muted)]">
             Allocate budget to at least one channel to see results.
           </p>
         )}
       </div>
 
       {/* ---- 2. Recommended Mix ---- */}
-      <div className="rounded-xl border border-gray-200 bg-white p-4 sm:p-5 transition-all duration-300">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 sm:p-5 transition-all duration-300">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)] mb-3">
           Recommended Mix
         </p>
-        <p className="text-sm text-gray-600 mb-3">
+        <p className="text-sm text-[var(--text-secondary)] mb-3">
           Balanced cross-channel allocation for {preset.name}:
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -181,18 +181,18 @@ export default function Insights({
                 key={id}
                 className={`rounded-lg border px-3 py-2 text-center text-xs transition-all duration-200 ${
                   isMatch
-                    ? "border-emerald-200 bg-emerald-50"
-                    : "border-gray-200 bg-gray-50"
+                    ? "border-emerald-500/30 bg-emerald-500/10"
+                    : "border-[var(--border-subtle)] bg-[var(--bg-elevated)]"
                 }`}
               >
                 <span
                   className="inline-block w-2 h-2 rounded-full mb-1"
                   style={{ backgroundColor: color }}
                 />
-                <p className="font-medium text-gray-700 truncate">
+                <p className="font-medium text-[var(--text-secondary)] truncate">
                   {preset.channels[id].name}
                 </p>
-                <p className="font-bold text-gray-900 mt-0.5">{pct}%</p>
+                <p className="font-bold text-[var(--text-primary)] mt-0.5">{pct}%</p>
               </div>
             );
           })}

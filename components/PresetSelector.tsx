@@ -14,7 +14,7 @@ export default function PresetSelector({ value, onChange }: PresetSelectorProps)
     <div>
       <label
         htmlFor="industry-preset"
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-sm font-medium text-[var(--text-secondary)] mb-1"
       >
         Industry
       </label>
@@ -22,8 +22,8 @@ export default function PresetSelector({ value, onChange }: PresetSelectorProps)
         id="industry-preset"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 bg-white
-                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full rounded-lg border border-[var(--border-default)] bg-[var(--bg-surface)] px-3 py-2 text-sm text-[var(--text-primary)]
+                   focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50"
       >
         {presetEntries.map(([key, preset]) => (
           <option key={key} value={key}>

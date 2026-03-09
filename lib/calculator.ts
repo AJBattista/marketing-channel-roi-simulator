@@ -36,10 +36,24 @@ export function simulateROI(
     }
 
     const cost = channelBudget;
-    const customers = cost / channel.cacBase;
+
+    // Step 1 — Saturation ratio
+    const sat = Math.max(0, (channelBudget / channel.spendCap) - 1);
+
+    // Step 2 — Raw adjusted CAC
+    const cacAdjRaw = channel.cacBase * (1 + 0.75 * sat * sat);
+
+    // Step 3 — Clamp adjusted CAC between floor and ceiling
+    const cac = Math.min(channel.cacCeiling, Math.max(channel.cacFloor, cacAdjRaw));
+
+    // Step 4 — Customers
+    const customers = channelBudget / cac;
+
+    // Step 5 — Revenue
     const revenue = customers * preset.rpc.base;
+
+    // Step 6 — Channel ROI
     const roi = ((revenue - cost) / cost) * 100;
-    const cac = customers > 0 ? cost / customers : 0;
 
     return {
       channelId: id,
@@ -55,9 +69,12 @@ export function simulateROI(
 }
 
 export function computeAggregates(results: ChannelResult[]): AggregateResult {
+  // Step 7 — Total portfolio revenue
   const totalRevenue = results.reduce((sum, r) => sum + r.revenue, 0);
   const totalCustomers = results.reduce((sum, r) => sum + r.customersAcquired, 0);
   const totalCost = results.reduce((sum, r) => sum + r.cost, 0);
+
+  // Step 8 — Portfolio ROI
   const totalROI = totalCost > 0 ? ((totalRevenue - totalCost) / totalCost) * 100 : 0;
 
   return { totalRevenue, totalCustomers, totalCost, totalROI };

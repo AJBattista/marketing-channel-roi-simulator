@@ -37,14 +37,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen bg-[#ECE8E2] font-[family-name:var(--font-geist-sans)]">
       <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8">
         {/* ---- Header ---- */}
         <header className="mb-6">
-          <h1 className="text-2xl font-bold text-[var(--text-primary)] sm:text-3xl">
+          <h1 className="text-2xl font-bold text-[#1F1F1F] sm:text-3xl">
             Marketing Channel ROI Simulator
           </h1>
-          <p className="mt-1 text-sm text-[var(--text-secondary)]">
+          <p className="mt-1 text-sm text-[#5A5A5A]">
             Estimate which marketing channels will produce the highest ROI for
             your budget.
           </p>
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
 
         {/* ---- Sliders ---- */}
-        <div className="mb-6 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4 sm:p-5">
+        <div className="mb-6 rounded-xl border border-[#D8D2CA] bg-white p-4 sm:p-5">
           <BudgetSliders
             totalBudget={budget}
             allocations={allocations}
@@ -88,7 +88,7 @@ export default function Home() {
         </div>
 
         {/* ---- Footer ---- */}
-        <footer className="mt-6 pb-4 text-center text-xs text-[var(--text-muted)]">
+        <footer className="mt-6 pb-4 text-center text-xs text-[#7A7A7A]">
           This simulator uses simplified industry benchmarks. Results are
           directional estimates, not precise forecasts.
         </footer>

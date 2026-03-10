@@ -43,11 +43,11 @@ export interface ChannelResult {
 }
 
 export const CHANNEL_COLORS: Record<ChannelId, string> = {
-  paidAds: "#60a5fa",
-  seo: "#34d399",
-  influencer: "#a78bfa",
-  email: "#fbbf24",
-  affiliate: "#2dd4bf",
+  paidAds: "#9E2F2F",
+  seo: "#3D7A5C",
+  influencer: "#6B5080",
+  email: "#C9A96E",
+  affiliate: "#5B7A94",
 };
 
 const CHANNEL_NAMES: Record<ChannelId, string> = {

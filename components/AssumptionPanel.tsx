@@ -36,7 +36,7 @@ function FieldInput({
   return (
     <div>
       <label className="block text-xs text-[#7A7A7A] mb-0.5">{label}</label>
-      <div className="flex items-center gap-1">
+      <div className="relative">
         <input
           type="text"
           inputMode="decimal"
@@ -57,10 +57,10 @@ function FieldInput({
               onChange(0);
             }
           }}
-          className="w-20 min-h-[44px] rounded border border-[#D8D2CA] bg-white px-2 py-2 text-xs text-[#1F1F1F]
+          className="w-full min-h-[44px] rounded border border-[#D8D2CA] bg-[#ECE8E2] px-3 py-2 pr-7 text-sm text-[#1F1F1F]
                      focus:outline-none focus:ring-1 focus:ring-[#9E2F2F]/30"
         />
-        <span className="text-xs text-[#7A7A7A]">{suffix}</span>
+        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[#7A7A7A]">{suffix}</span>
       </div>
     </div>
   );
@@ -185,7 +185,7 @@ export default function BenchmarkPanel({
 
             {editorOpen && (
               <div className="border-t border-[#D8D2CA] px-5 py-4 space-y-4">
-                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <FieldInput
                     label="RPC Floor"
                     value={preset.rpc.floor}
@@ -206,47 +206,49 @@ export default function BenchmarkPanel({
                   />
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {CHANNEL_IDS.map((id) => {
                     const ch = preset.channels[id];
                     const color = CHANNEL_COLORS[id];
 
                     return (
-                      <div key={id} className="flex flex-wrap items-end gap-x-3 gap-y-2">
-                        <div className="flex items-center gap-1.5 w-40 shrink-0">
+                      <div key={id} className="rounded-lg bg-[#F7F5F2] p-4">
+                        <div className="flex items-center gap-2 mb-3">
                           <span
                             className="inline-block w-2 h-2 rounded-full shrink-0"
                             style={{ backgroundColor: color }}
                           />
-                          <span className="text-xs font-medium text-[#5A5A5A] truncate">
+                          <span className="text-sm font-medium text-[#1F1F1F]">
                             {ch.name}
                           </span>
                         </div>
 
-                        <FieldInput
-                          label="Floor"
-                          value={ch.cacFloor}
-                          suffix="$"
-                          onChange={(v) => updateChannel(id, "cacFloor", v)}
-                        />
-                        <FieldInput
-                          label="Base"
-                          value={ch.cacBase}
-                          suffix="$"
-                          onChange={(v) => updateChannel(id, "cacBase", v)}
-                        />
-                        <FieldInput
-                          label="Ceiling"
-                          value={ch.cacCeiling}
-                          suffix="$"
-                          onChange={(v) => updateChannel(id, "cacCeiling", v)}
-                        />
-                        <FieldInput
-                          label="Spend Cap"
-                          value={ch.spendCap}
-                          suffix="$"
-                          onChange={(v) => updateChannel(id, "spendCap", v)}
-                        />
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          <FieldInput
+                            label="Floor"
+                            value={ch.cacFloor}
+                            suffix="$"
+                            onChange={(v) => updateChannel(id, "cacFloor", v)}
+                          />
+                          <FieldInput
+                            label="Base"
+                            value={ch.cacBase}
+                            suffix="$"
+                            onChange={(v) => updateChannel(id, "cacBase", v)}
+                          />
+                          <FieldInput
+                            label="Ceiling"
+                            value={ch.cacCeiling}
+                            suffix="$"
+                            onChange={(v) => updateChannel(id, "cacCeiling", v)}
+                          />
+                          <FieldInput
+                            label="Spend Cap"
+                            value={ch.spendCap}
+                            suffix="$"
+                            onChange={(v) => updateChannel(id, "spendCap", v)}
+                          />
+                        </div>
                       </div>
                     );
                   })}

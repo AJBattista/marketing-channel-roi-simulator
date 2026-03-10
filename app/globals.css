@@ -3,22 +3,30 @@
 @tailwind utilities;
 
 :root {
-  --bg-base: #0b1120;
-  --bg-surface: #111827;
-  --bg-elevated: #1a2332;
-  --border-subtle: #1e293b;
-  --border-default: #334155;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --bg: #ECE8E2;
+  --panel: #FFFFFF;
+  --panel-elevated: #F7F5F2;
+  --border: #D8D2CA;
+  --border-active: #C4BDB4;
+  --text-strong: #1F1F1F;
+  --text-normal: #5A5A5A;
+  --text-muted: #7A7A7A;
+  --accent: #9E2F2F;
+  --accent-hover: #872626;
+  --highlight: #C9A96E;
 }
 
 body {
-  color: var(--text-primary);
-  background: var(--bg-base);
+  color: var(--text-strong);
+  background: var(--bg);
 }
 
-/* Range slider dark styling */
+::selection {
+  background: rgba(158, 47, 47, 0.15);
+  color: #1F1F1F;
+}
+
+/* Range slider styling */
 input[type="range"] {
   background: transparent;
 }
@@ -26,13 +34,13 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
-  background: var(--border-default);
+  background: #D8D2CA;
 }
 
 input[type="range"]::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: var(--border-default);
+  background: #D8D2CA;
   border: none;
 }
 
@@ -43,8 +51,8 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 50%;
   margin-top: -5px;
   cursor: pointer;
-  border: 2px solid var(--bg-base);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: #9E2F2F;
+  border: 2px solid var(--bg);
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -52,8 +60,8 @@ input[type="range"]::-moz-range-thumb {
   height: 16px;
   border-radius: 50%;
   cursor: pointer;
-  border: 2px solid var(--bg-base);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  background: #9E2F2F;
+  border: 2px solid var(--bg);
 }
 
 @layer utilities {

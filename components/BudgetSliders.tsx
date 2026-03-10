@@ -75,7 +75,7 @@ export default function BudgetSliders({
                 className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
                 style={{ backgroundColor: color }}
               />
-              <span className="text-xs sm:text-sm font-medium text-[var(--text-secondary)] truncate">
+              <span className="text-xs sm:text-sm font-medium text-[#5A5A5A] truncate">
                 {channels[id].name}
               </span>
             </div>
@@ -91,10 +91,10 @@ export default function BudgetSliders({
               style={{ accentColor: color }}
             />
 
-            <span className="w-10 sm:w-12 text-right text-xs sm:text-sm font-semibold text-[var(--text-primary)] transition-colors">
+            <span className="w-10 sm:w-12 text-right text-xs sm:text-sm font-semibold text-[#1F1F1F] transition-colors">
               {pct}%
             </span>
-            <span className="w-16 sm:w-20 text-right text-xs sm:text-sm text-[var(--text-muted)] transition-colors">
+            <span className="w-16 sm:w-20 text-right text-xs sm:text-sm text-[#7A7A7A] transition-colors">
               {formatDollars(dollars)}
             </span>
           </div>

@@ -35,7 +35,7 @@ function FieldInput({
 
   return (
     <div>
-      <label className="block text-xs text-[var(--text-muted)] mb-0.5">{label}</label>
+      <label className="block text-xs text-[#7A7A7A] mb-0.5">{label}</label>
       <div className="flex items-center gap-1">
         <input
           type="text"
@@ -57,10 +57,10 @@ function FieldInput({
               onChange(0);
             }
           }}
-          className="w-20 min-h-[44px] rounded border border-[var(--border-default)] bg-[var(--bg-base)] px-2 py-2 text-xs text-[var(--text-primary)]
-                     focus:outline-none focus:ring-1 focus:ring-blue-500/50"
+          className="w-20 min-h-[44px] rounded border border-[#D8D2CA] bg-white px-2 py-2 text-xs text-[#1F1F1F]
+                     focus:outline-none focus:ring-1 focus:ring-[#9E2F2F]/30"
         />
-        <span className="text-xs text-[var(--text-muted)]">{suffix}</span>
+        <span className="text-xs text-[#7A7A7A]">{suffix}</span>
       </div>
     </div>
   );
@@ -84,16 +84,16 @@ export default function BenchmarkPanel({
   };
 
   return (
-    <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] overflow-hidden transition-all duration-200">
+    <div className="rounded-xl border border-[#D8D2CA] bg-white overflow-hidden transition-all duration-200">
       {/* ---- Header (toggle) ---- */}
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-5 py-3 text-sm font-medium text-[var(--text-secondary)] hover:bg-white/[0.02] transition-colors"
+        className="flex w-full items-center justify-between px-5 py-3 text-sm font-medium text-[#5A5A5A] hover:bg-[#F7F5F2] transition-colors"
       >
         <span>Industry Benchmarks</span>
         <svg
-          className={`h-4 w-4 text-[var(--text-muted)] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`h-4 w-4 text-[#7A7A7A] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -106,11 +106,11 @@ export default function BenchmarkPanel({
       {open && (
         <>
           {/* ---- Summary ---- */}
-          <div className="border-t border-[var(--border-subtle)] px-5 py-4">
+          <div className="border-t border-[#D8D2CA] px-5 py-4">
             <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm mb-4">
               <span>
-                <span className="text-[var(--text-muted)]">RPC </span>
-                <span className="font-semibold text-[var(--text-primary)]">
+                <span className="text-[#7A7A7A]">RPC </span>
+                <span className="font-semibold text-[#1F1F1F]">
                   {fmt(preset.rpc.floor)} – {fmt(preset.rpc.base)} – {fmt(preset.rpc.ceiling)}
                 </span>
               </span>
@@ -119,7 +119,7 @@ export default function BenchmarkPanel({
             <div className="overflow-x-auto">
               <table className="w-full text-xs min-w-[480px]">
                 <thead>
-                  <tr className="text-left text-[var(--text-muted)] uppercase tracking-wide">
+                  <tr className="text-left text-[#7A7A7A] uppercase tracking-wide">
                     <th className="pb-2 pr-3 font-medium">Channel</th>
                     <th className="pb-2 px-3 text-right font-medium">CAC Floor</th>
                     <th className="pb-2 px-3 text-right font-medium">CAC Base</th>
@@ -132,28 +132,28 @@ export default function BenchmarkPanel({
                     const ch = preset.channels[id];
                     const color = CHANNEL_COLORS[id];
                     return (
-                      <tr key={id} className="border-t border-[var(--border-subtle)]">
+                      <tr key={id} className="border-t border-[#D8D2CA]">
                         <td className="py-2 pr-3">
                           <span className="flex items-center gap-1.5">
                             <span
                               className="inline-block w-2 h-2 rounded-full shrink-0"
                               style={{ backgroundColor: color }}
                             />
-                            <span className="font-medium text-[var(--text-secondary)] truncate">
+                            <span className="font-medium text-[#5A5A5A] truncate">
                               {ch.name}
                             </span>
                           </span>
                         </td>
-                        <td className="py-2 px-3 text-right text-[var(--text-muted)]">
+                        <td className="py-2 px-3 text-right text-[#7A7A7A]">
                           {fmt(ch.cacFloor)}
                         </td>
-                        <td className="py-2 px-3 text-right text-[var(--text-secondary)] font-semibold">
+                        <td className="py-2 px-3 text-right text-[#5A5A5A] font-semibold">
                           {fmt(ch.cacBase)}
                         </td>
-                        <td className="py-2 px-3 text-right text-[var(--text-muted)]">
+                        <td className="py-2 px-3 text-right text-[#7A7A7A]">
                           {fmt(ch.cacCeiling)}
                         </td>
-                        <td className="py-2 pl-3 text-right text-[var(--text-muted)]">
+                        <td className="py-2 pl-3 text-right text-[#7A7A7A]">
                           {fmt(ch.spendCap)}
                         </td>
                       </tr>
@@ -165,15 +165,15 @@ export default function BenchmarkPanel({
           </div>
 
           {/* ---- Expand/Collapse for editor ---- */}
-          <div className="border-t border-[var(--border-subtle)]">
+          <div className="border-t border-[#D8D2CA]">
             <button
               type="button"
               onClick={() => setEditorOpen(!editorOpen)}
-              className="flex w-full items-center justify-between px-5 py-3 text-xs font-medium text-[var(--text-muted)] hover:bg-white/[0.02] transition-colors"
+              className="flex w-full items-center justify-between px-5 py-3 text-xs font-medium text-[#7A7A7A] hover:bg-[#F7F5F2] transition-colors"
             >
               <span>{editorOpen ? "Hide Advanced Controls" : "Edit Benchmarks"}</span>
               <svg
-                className={`h-3.5 w-3.5 text-[var(--text-muted)] transition-transform duration-200 ${editorOpen ? "rotate-180" : ""}`}
+                className={`h-3.5 w-3.5 text-[#7A7A7A] transition-transform duration-200 ${editorOpen ? "rotate-180" : ""}`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -184,7 +184,7 @@ export default function BenchmarkPanel({
             </button>
 
             {editorOpen && (
-              <div className="border-t border-[var(--border-subtle)] px-5 py-4 space-y-4">
+              <div className="border-t border-[#D8D2CA] px-5 py-4 space-y-4">
                 <div className="flex flex-wrap gap-x-4 gap-y-2">
                   <FieldInput
                     label="RPC Floor"
@@ -218,7 +218,7 @@ export default function BenchmarkPanel({
                             className="inline-block w-2 h-2 rounded-full shrink-0"
                             style={{ backgroundColor: color }}
                           />
-                          <span className="text-xs font-medium text-[var(--text-secondary)] truncate">
+                          <span className="text-xs font-medium text-[#5A5A5A] truncate">
                             {ch.name}
                           </span>
                         </div>
